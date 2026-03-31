@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InFrame — Videografie & Content Creatie</title>
+  <meta name="description" content="Jouw verhaal, In Frame. Videografie en content creatie voor kleine bedrijven." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --bg:        #080808;
+      --surface:   #111111;
+      --border:    rgba(255,255,255,0.08);
+      --muted:     rgba(255,255,255,0.35);
+      --soft:      rgba(255,255,255,0.65);
+      --white:     #ffffff;
+      --accent:    #c8b89a;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    /* ─── NAV ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s, background .3s, backdrop-filter .3s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(12px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: var(--white);
+      color: var(--bg);
+      padding: 6px 12px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 40px; }
+    .nav-links a {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--soft);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .btn-primary {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--white);
+      padding: 10px 20px;
+      transition: background .2s, color .2s;
+    }
+    .btn-primary:hover { background: var(--accent); }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+    .hero-label {
+      font-size: 10px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(60px, 9vw, 120px);
+      font-weight: 800;
+      line-height: 1.0;
+      margin-bottom: 28px;
+    }
+    .hero-title .dim { color: var(--accent); font-weight: 700; font-style: italic; }
+    .hero-sub {
+      font-size: 17px;
+      color: var(--soft);
+      max-width: 440px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn-outline {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--white);
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-outline:hover { border-color: var(--white); }
+    .scroll-hint {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 11px; letter-spacing: .1em;
+    }
+    .scroll-arrow {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--muted));
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+    /* ─── CAROUSEL ───────────────────────────────────────── */
+    #clients {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .carousel-label {
+      text-align: center;
+      font-size: 9px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+      padding: 0 48px;
+    }
+    .carousel-track-wrap { overflow: hidden; width: 100%; }
+    .carousel-track {
+      display: flex; gap: 64px; width: max-content;
+      animation: scrollLeft 24s linear infinite;
+    }
+    .carousel-track:hover { animation-play-state: paused; }
+    .carousel-item {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: .06em;
+      color: var(--soft);
+      white-space: nowrap;
+      transition: color .2s;
+    }
+    .carousel-item:hover { color: var(--white); }
+    @keyframes scrollLeft {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── SECTION SHARED ─────────────────────────────────── */
+    section { padding: 100px 48px; }
+    .section-label {
+      font-size: 9px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(40px, 4.5vw, 64px);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 48px;
+    }
+    .section-title em { color: var(--accent); font-style: italic; font-weight: 300; }
+
+    /* ─── PORTFOLIO ──────────────────────────────────────── */
+    #portfolio { max-width: 1200px; margin: 0 auto; }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .portfolio-card {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .portfolio-card img,
+    .portfolio-card .yt-thumb {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s ease, opacity .3s;
+      opacity: .75;
+    }
+    .portfolio-card:hover img,
+    .portfolio-card:hover .yt-thumb { transform: scale(1.04); opacity: 1; }
+    .portfolio-card-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px 20px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,.85) 0%, transparent 100%);
+    }
+    .portfolio-card-cat {
+      font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 4px;
+    }
+    .portfolio-card-title { font-size: 14px; font-weight: 500; }
+    .play-icon {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .play-icon svg { width: 18px; height: 18px; fill: white; margin-left: 3px; }
+    .portfolio-card:hover .play-icon { opacity: 1; }
+
+    /* ─── VIDEO MODAL ────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.92);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-inner {
+      width: 90vw; max-width: 900px;
+      aspect-ratio: 16/9;
+      position: relative;
+    }
+    .modal-inner iframe { width: 100%; height: 100%; border: none; }
+    .modal-close {
+      position: absolute; top: -40px; right: 0;
+      font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--soft); transition: color .2s;
+    }
+    .modal-close:hover { color: var(--white); }
+
+    /* ─── PACKAGES ───────────────────────────────────────── */
+    #pakketten { background: var(--bg); }
+    .packages-wrap { max-width: 1100px; margin: 0 auto; }
+    .packages-intro { max-width: 480px; }
+    .packages-sub { color: var(--soft); font-size: 14px; margin-top: -32px; margin-bottom: 48px; }
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .package-card {
+      border: 1px solid var(--border);
+      padding: 40px 36px;
+      position: relative;
+      transition: border-color .2s;
+    }
+    .package-card:hover { border-color: rgba(255,255,255,0.25); }
+    .package-card.featured {
+      border-color: var(--white);
+      background: var(--surface);
+    }
+    .package-badge {
+      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      background: var(--white); color: var(--bg);
+      font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+      padding: 4px 14px;
+    }
+    .package-duration {
+      font-family: var(--serif);
+      font-size: 42px; font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .package-tagline { font-size: 11px; color: var(--muted); margin-bottom: 20px; letter-spacing: .05em; }
+    .package-desc { font-size: 15px; color: var(--soft); margin-bottom: 28px; line-height: 1.65; }
+    .package-features { list-style: none; margin-bottom: 36px; display: flex; flex-direction: column; gap: 10px; }
+    .package-features li { font-size: 15px; color: var(--soft); display: flex; align-items: center; gap: 10px; }
+    .package-features li::before {
+      content: '';
+      width: 14px; height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .btn-package {
+      width: 100%;
+      padding: 13px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      color: var(--white);
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .btn-package:hover, .package-card.featured .btn-package {
+      background: var(--white); color: var(--bg); border-color: var(--white);
+    }
+    .package-card.featured .btn-package:hover { background: var(--accent); border-color: var(--accent); }
+
+    /* ─── CONTACT ────────────────────────────────────────── */
+    #contact { max-width: 680px; margin: 0 auto; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 14px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: rgba(255,255,255,0.4); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+    .form-select { appearance: none; }
+    .form-select option { background: var(--surface); }
+    .form-textarea { min-height: 140px; resize: vertical; }
+    .btn-submit {
+      padding: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      background: var(--white);
+      color: var(--bg);
+      transition: background .2s;
+    }
+    .btn-submit:hover { background: var(--accent); }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo { font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: 10px; color: var(--muted); }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 18px 24px; }
+      .nav-links { gap: 24px; }
+      section { padding: 72px 24px; }
+      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+      .packages-grid { grid-template-columns: 1fr; max-width: 480px; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 20px; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .nav-links .hide-mobile { display: none; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── FADE IN ────────────────────────────────────────── */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ▸ CONFIG — Edit this block to update your content
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+const CONFIG = {
+
+  // ── Email for contact form ──────────────────────────────
+  email: "info@studioinframe.nl",
+
+  // ── Client carousel ─────────────────────────────────────
+  // Just add or remove names from this list.
+  clients: [],
+
+  // ── Portfolio videos ─────────────────────────────────────
+  // To add a video: paste a YouTube URL in the 'url' field.
+  // category and title show on the card.
+  // Leave url empty ("") to show a placeholder card.
+  portfolio: [
+    {
+      category: "BRANDING",
+      title: "Brand Film",
+      url: "",           // e.g. "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      thumb: ""          // optional: direct image URL if not YouTube
+    },
+    {
+      category: "COMMERCIAL",
+      title: "Product Launch",
+      url: "",
+      thumb: ""
+    },
+    {
+      category: "SOCIAL MEDIA",
+      title: "Social Content",
+      url: "",
+      thumb: ""
+    },
+    {
+      category: "EVENTS",
+      title: "Event Coverage",
+      url: "",
+      thumb: ""
+    },
+    {
+      category: "CORPORATE",
+      title: "Corporate Video",
+      url: "",
+      thumb: ""
+    },
+    {
+      category: "DOCUMENTARY",
+      title: "Interview Series",
+      url: "",
+      thumb: ""
+    },
+  ],
+
+  // ── Packages ─────────────────────────────────────────────
+  packages: [
+    {
+      duration: "1 Maand",
+      tagline: "Probeer het uit",
+      desc: "Perfect om te ontdekken wat videocontent voor jouw merk kan doen.",
+      features: [
+        "4 korte video's (Reels/TikTok)",
+        "1 langere video (60–90 sec)",
+        "Content strategie gesprek",
+        "Basis editing & color grading",
+        "1 revisieronde",
+      ],
+      featured: false,
+      badge: ""
+    },
+    {
+      duration: "3 Maanden",
+      tagline: "Meest gekozen",
+      desc: "Bouw consistentie op en zie echte groei in je bereik.",
+      features: [
+        "12 korte video's (Reels/TikTok)",
+        "3 langere video's (60–90 sec)",
+        "Maandelijkse content strategie",
+        "Premium editing & color grading",
+        "Thumbnail design",
+        "2 revisierondes per video",
+        "Social media optimalisatie",
+      ],
+      featured: true,
+      badge: "POPULAIR"
+    },
+    {
+      duration: "6 Maanden",
+      tagline: "Maximaal resultaat",
+      desc: "Volledige content partner. Wij regelen alles.",
+      features: [
+        "24+ korte video's (Reels/TikTok)",
+        "6 langere video's (60–90 sec)",
+        "Volledige content strategie",
+        "Premium editing, grading & motion",
+        "Thumbnail design",
+        "Onbeperkte revisies",
+        "Prioriteit support",
+        "Maandelijkse rapportage",
+      ],
+      featured: false,
+      badge: ""
+    },
+  ]
+};
+</script>
+
+<!-- ─── NAV ──────────────────────────────────────────────── -->
+<nav id="nav">
+  <a href="#" class="nav-logo">InFrame</a>
+  <div class="nav-links">
+    <a href="#portfolio" class="hide-mobile">Portfolio</a>
+    <a href="#pakketten" class="hide-mobile">Pakketten</a>
+    <a href="#contact" class="hide-mobile">Contact</a>
+    <a href="#contact" class="btn-primary">Start Project</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <p class="hero-label fade-in">Videografie &amp; Content Creatie</p>
+  <h1 class="hero-title fade-in">
+    Jouw verhaal,<br>
+    <span class="dim">In Frame.</span>
+  </h1>
+  <p class="hero-sub fade-in">
+    Jij weet wat je bedrijf bijzonder maakt. Wij zorgen dat de wereld het ziet.
+  </p>
+  <div class="hero-actions fade-in">
+    <a href="#portfolio" class="btn-primary">Bekijk ons werk</a>
+    <a href="#pakketten" class="btn-outline">Samenwerkingen</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ─── CLIENTS ───────────────────────────────────────────── -->
+<div id="clients">
+  <p class="carousel-label">Vertrouwd door toonaangevende merken</p>
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="carouselTrack"></div>
+  </div>
+</div>
+
+<!-- ─── PORTFOLIO ─────────────────────────────────────────── -->
+<section>
+  <div id="portfolio" style="max-width:1200px;margin:0 auto;">
+    <p class="section-label fade-in">Portfolio</p>
+    <h2 class="section-title fade-in">Oordeel <em>zelf.</em></h2>
+    <div class="portfolio-grid" id="portfolioGrid"></div>
+  </div>
+</section>
+
+<!-- ─── PACKAGES ─────────────────────────────────────────── -->
+<section id="pakketten">
+  <div class="packages-wrap">
+    <div class="packages-intro">
+      <p class="section-label fade-in">Samenwerkingen</p>
+      <h2 class="section-title fade-in">Jij <em>kiest.</em></h2>
+    </div>
+    <p class="packages-sub fade-in">Transparantie voorop.</p>
+    <div class="packages-grid" id="packagesGrid"></div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ───────────────────────────────────────────── -->
+<section>
+  <div id="contact">
+    <p class="section-label fade-in">Contact</p>
+    <h2 class="section-title fade-in">Laten we <em>praten.</em></h2>
+    <p style="color:var(--soft);font-size:14px;margin-top:-32px;margin-bottom:40px;" class="fade-in">
+      Vertel ons over je project. Wij reageren binnen 24 uur.
+    </p>
+    <form class="contact-form fade-in" id="contactForm">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Naam *</label>
+          <input class="form-input" type="text" placeholder="Je naam" required />
+        </div>
+        <div class="form-field">
+          <label class="form-label">E-mail *</label>
+          <input class="form-input" type="email" placeholder="je@email.nl" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Bedrijf</label>
+          <input class="form-input" type="text" placeholder="Bedrijfsnaam" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Interesse</label>
+          <select class="form-select form-input">
+            <option value="">Kies een pakket</option>
+            <option>1 Maand</option>
+            <option>3 Maanden</option>
+            <option>6 Maanden</option>
+            <option>Anders</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Bericht *</label>
+        <textarea class="form-textarea form-input" placeholder="Vertel ons over je project..." required></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Verstuur bericht</button>
+    </form>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────── -->
+<footer>
+  <span class="footer-logo">InFrame</span>
+  <div class="footer-links">
+    <a href="#portfolio">Portfolio</a>
+    <a href="#pakketten">Pakketten</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <span class="footer-copy">© 2026 InFrame. Alle rechten voorbehouden.</span>
+</footer>
+
+<!-- ─── VIDEO MODAL ───────────────────────────────────────── -->
+<div class="modal-overlay" id="videoModal" onclick="closeModal(event)">
+  <div class="modal-inner">
+    <button class="modal-close" onclick="closeModal()">Sluiten ✕</button>
+    <iframe id="modalIframe" src="" allowfullscreen allow="autoplay"></iframe>
+  </div>
+</div>
+
+<!-- ─── SCRIPTS ───────────────────────────────────────────── -->
+<script>
+// ── Utility ──────────────────────────────────────────────
+function getYouTubeId(url) {
+  if (!url) return null;
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+function getThumb(item) {
+  const ytId = getYouTubeId(item.url);
+  if (ytId) return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`;
+  if (item.thumb) return item.thumb;
+  return null;
+}
+
+// ── Carousel ─────────────────────────────────────────────
+function buildCarousel() {
+  const track = document.getElementById('carouselTrack');
+  const doubled = [...CONFIG.clients, ...CONFIG.clients];
+  track.innerHTML = doubled.map(c =>
+    `<span class="carousel-item">${c}</span>`
+  ).join('');
+}
+
+// ── Portfolio ─────────────────────────────────────────────
+function buildPortfolio() {
+  const grid = document.getElementById('portfolioGrid');
+  grid.innerHTML = CONFIG.portfolio.map((item, i) => {
+    const thumb = getThumb(item);
+    const ytId  = getYouTubeId(item.url);
+    const hasVideo = !!item.url;
+    const thumbHtml = thumb
+      ? `<img class="yt-thumb" src="${thumb}" alt="${item.title}" loading="lazy" />`
+      : `<div class="yt-thumb" style="background:var(--surface);display:flex;align-items:center;justify-content:center;">
+           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1">
+             <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/>
+           </svg>
+         </div>`;
+
+    return `
+      <div class="portfolio-card fade-in" ${hasVideo ? `onclick="openModal('${ytId || item.url}')"` : ''}>
+        ${thumbHtml}
+        ${hasVideo ? `
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>` : ''}
+        <div class="portfolio-card-info">
+          <div class="portfolio-card-cat">${item.category}</div>
+          <div class="portfolio-card-title">${item.title}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Packages ─────────────────────────────────────────────
+function buildPackages() {
+  const grid = document.getElementById('packagesGrid');
+  grid.innerHTML = CONFIG.packages.map(p => `
+    <div class="package-card ${p.featured ? 'featured' : ''} fade-in">
+      ${p.badge ? `<div class="package-badge">${p.badge}</div>` : ''}
+      <div class="package-duration">${p.duration}</div>
+      <div class="package-tagline">${p.tagline}</div>
+      <p class="package-desc">${p.desc}</p>
+      <ul class="package-features">
+        ${p.features.map(f => `<li>${f}</li>`).join('')}
+      </ul>
+      <a href="#contact"><button class="btn-package">Neem contact op →</button></a>
+    </div>
+  `).join('');
+}
+
+// ── Modal ─────────────────────────────────────────────────
+function openModal(id) {
+  const modal  = document.getElementById('videoModal');
+  const iframe = document.getElementById('modalIframe');
+  if (id && id.length === 11) {
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+  } else if (id) {
+    iframe.src = id;
+  }
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('videoModal') && !e.target.classList.contains('modal-close')) return;
+  const modal  = document.getElementById('videoModal');
+  const iframe = document.getElementById('modalIframe');
+  modal.classList.remove('open');
+  iframe.src = '';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal({}); });
+
+// ── Nav scroll ────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── Contact form (mailto fallback) ────────────────────────
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const fields = this.querySelectorAll('input,select,textarea');
+  const naam   = fields[0].value;
+  const email  = fields[1].value;
+  const bedrijf= fields[2].value;
+  const pakket = fields[3].value;
+  const bericht= fields[4].value;
+  const subject= encodeURIComponent(`Aanvraag InFrame — ${naam}`);
+  const body   = encodeURIComponent(`Naam: ${naam}\nE-mail: ${email}\nBedrijf: ${bedrijf}\nPakket: ${pakket}\n\n${bericht}`);
+  window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
+});
+
+// ── Intersection fade ─────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+function observeAll() {
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+
+// ── Init ──────────────────────────────────────────────────
+buildCarousel();
+buildPortfolio();
+buildPackages();
+observeAll();
+
+// Hero stagger
+document.querySelectorAll('#hero .fade-in').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 0.15}s`;
+});
+setTimeout(observeAll, 50);
+</script>
+</body>
+</html>
