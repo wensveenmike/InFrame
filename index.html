@@ -271,63 +271,7 @@
     }
     .modal-close:hover { color: var(--white); }
 
-    /* ─── PACKAGES ───────────────────────────────────────── */
-    #pakketten { background: var(--bg); }
-    .packages-wrap { max-width: 1100px; margin: 0 auto; }
-    .packages-intro { max-width: 480px; }
-    .packages-sub { color: var(--soft); font-size: 14px; margin-top: -32px; margin-bottom: 48px; }
-    .packages-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .package-card {
-      border: 1px solid var(--border);
-      padding: 40px 36px;
-      position: relative;
-      transition: border-color .2s;
-    }
-    .package-card:hover { border-color: rgba(255,255,255,0.25); }
-    .package-card.featured {
-      border-color: var(--white);
-      background: var(--surface);
-    }
-    .package-badge {
-      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-      background: var(--white); color: var(--bg);
-      font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
-      padding: 4px 14px;
-    }
-    .package-duration {
-      font-family: var(--serif);
-      font-size: 42px; font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .package-tagline { font-size: 11px; color: var(--muted); margin-bottom: 20px; letter-spacing: .05em; }
-    .package-desc { font-size: 15px; color: var(--soft); margin-bottom: 28px; line-height: 1.65; }
-    .package-features { list-style: none; margin-bottom: 36px; display: flex; flex-direction: column; gap: 10px; }
-    .package-features li { font-size: 15px; color: var(--soft); display: flex; align-items: center; gap: 10px; }
-    .package-features li::before {
-      content: '';
-      width: 14px; height: 1px;
-      background: var(--accent);
-      flex-shrink: 0;
-    }
-    .btn-package {
-      width: 100%;
-      padding: 13px;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      border: 1px solid var(--border);
-      color: var(--white);
-      transition: background .2s, border-color .2s, color .2s;
-    }
-    .btn-package:hover, .package-card.featured .btn-package {
-      background: var(--white); color: var(--bg); border-color: var(--white);
-    }
-    .package-card.featured .btn-package:hover { background: var(--accent); border-color: var(--accent); }
+
 
     /* ─── CONTACT ────────────────────────────────────────── */
     #contact { max-width: 680px; margin: 0 auto; }
@@ -513,7 +457,6 @@ const CONFIG = {
   <a href="#" class="nav-logo">InFrame</a>
   <div class="nav-links">
     <a href="#portfolio" class="hide-mobile">Portfolio</a>
-    <a href="#pakketten" class="hide-mobile">Pakketten</a>
     <a href="#contact" class="hide-mobile">Contact</a>
     <a href="#contact" class="btn-primary">Start Project</a>
   </div>
@@ -532,7 +475,7 @@ const CONFIG = {
   </p>
   <div class="hero-actions fade-in">
     <a href="#portfolio" class="btn-primary">Bekijk ons werk</a>
-    <a href="#pakketten" class="btn-outline">Samenwerkingen</a>
+    <a href="#contact" class="btn-outline">Neem contact op</a>
   </div>
   <div class="scroll-hint">
     <div class="scroll-arrow"></div>
@@ -556,17 +499,7 @@ const CONFIG = {
   </div>
 </section>
 
-<!-- ─── PACKAGES ─────────────────────────────────────────── -->
-<section id="pakketten">
-  <div class="packages-wrap">
-    <div class="packages-intro">
-      <p class="section-label fade-in">Samenwerkingen</p>
-      <h2 class="section-title fade-in">Jij <em>kiest.</em></h2>
-    </div>
-    <p class="packages-sub fade-in">Transparantie voorop.</p>
-    <div class="packages-grid" id="packagesGrid"></div>
-  </div>
-</section>
+
 
 <!-- ─── CONTACT ───────────────────────────────────────────── -->
 <section>
@@ -617,7 +550,6 @@ const CONFIG = {
   <span class="footer-logo">InFrame</span>
   <div class="footer-links">
     <a href="#portfolio">Portfolio</a>
-    <a href="#pakketten">Pakketten</a>
     <a href="#contact">Contact</a>
   </div>
   <span class="footer-copy">© 2026 InFrame. Alle rechten voorbehouden.</span>
@@ -687,23 +619,6 @@ function buildPortfolio() {
   }).join('');
 }
 
-// ── Packages ─────────────────────────────────────────────
-function buildPackages() {
-  const grid = document.getElementById('packagesGrid');
-  grid.innerHTML = CONFIG.packages.map(p => `
-    <div class="package-card ${p.featured ? 'featured' : ''} fade-in">
-      ${p.badge ? `<div class="package-badge">${p.badge}</div>` : ''}
-      <div class="package-duration">${p.duration}</div>
-      <div class="package-tagline">${p.tagline}</div>
-      <p class="package-desc">${p.desc}</p>
-      <ul class="package-features">
-        ${p.features.map(f => `<li>${f}</li>`).join('')}
-      </ul>
-      <a href="#contact"><button class="btn-package">Neem contact op →</button></a>
-    </div>
-  `).join('');
-}
-
 // ── Modal ─────────────────────────────────────────────────
 function openModal(id) {
   const modal  = document.getElementById('videoModal');
@@ -759,7 +674,6 @@ function observeAll() {
 // ── Init ──────────────────────────────────────────────────
 buildCarousel();
 buildPortfolio();
-buildPackages();
 observeAll();
 
 // Hero stagger
