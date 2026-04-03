@@ -587,7 +587,21 @@ function getThumb(item) {
 // ── Carousel ─────────────────────────────────────────────
 function buildCarousel() {
   const track = document.getElementById('carouselTrack');
+
+  if (CONFIG.clients.length <= 1) {
+    track.style.justifyContent = 'center';
+    track.style.width = '100%';
+    track.style.animation = 'none';
+    track.innerHTML = CONFIG.clients.map(c =>
+      `<span class="carousel-item">${c}</span>`
+    ).join('');
+    return;
+  }
+
   const doubled = [...CONFIG.clients, ...CONFIG.clients];
+  track.style.justifyContent = '';
+  track.style.width = 'max-content';
+  track.style.animation = '';
   track.innerHTML = doubled.map(c =>
     `<span class="carousel-item">${c}</span>`
   ).join('');
