@@ -365,15 +365,15 @@ const CONFIG = {
   // Leave url empty ("") to show a placeholder card.
   portfolio: [
     {
-      category: "Rootss",
+      category: "RootssGouda",
       title: "",
-      url: "https://youtube.com/shorts/pzA5UbI9lio",
+      url: "https://youtube.com/shorts/UWOtyt-3BTA",
       thumb: ""
     },
     {
-      category: "Rootss",
-      title: "https://youtube.com/shorts/UWOtyt-3BTA",
-      url: "",
+      category: "RootssGouda",
+      title: "",
+      url: "https://youtube.com/shorts/pzA5UbI9lio",
       thumb: ""
     },
     {
@@ -566,7 +566,7 @@ const CONFIG = {
 // ── Utility ──────────────────────────────────────────────
 function getYouTubeId(url) {
   if (!url) return null;
-  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   return match ? match[1] : null;
 }
 
