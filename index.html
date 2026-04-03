@@ -572,7 +572,7 @@ function getYouTubeId(url) {
 
 function getThumb(item) {
   const ytId = getYouTubeId(item.url);
-  if (ytId) return `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`;
+  if (ytId) return `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
   if (item.thumb) return item.thumb;
   return null;
 }
