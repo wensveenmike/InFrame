@@ -212,7 +212,7 @@
     }
     .portfolio-card {
       position: relative;
-      aspect-ratio: 4/3;
+      aspect-ratio: 9/16;
       overflow: hidden;
       background: var(--surface);
       cursor: pointer;
@@ -362,38 +362,38 @@ const CONFIG = {
   // Leave url empty ("") to show a placeholder card.
   portfolio: [
     {
-      category: "BRANDING",
-      title: "Brand Film",
-      url: "",           // e.g. "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-      thumb: ""          // optional: direct image URL if not YouTube
-    },
-    {
-      category: "COMMERCIAL",
-      title: "Product Launch",
+      category: "CLIENT 1",
+      title: "",
       url: "",
       thumb: ""
     },
     {
-      category: "SOCIAL MEDIA",
-      title: "Social Content",
+      category: "CLIENT 2",
+      title: "",
       url: "",
       thumb: ""
     },
     {
-      category: "EVENTS",
-      title: "Event Coverage",
+      category: "CLIENT 3",
+      title: "",
       url: "",
       thumb: ""
     },
     {
-      category: "CORPORATE",
-      title: "Corporate Video",
+      category: "CLIENT 4",
+      title: "",
       url: "",
       thumb: ""
     },
     {
-      category: "DOCUMENTARY",
-      title: "Interview Series",
+      category: "CLIENT 5",
+      title: "",
+      url: "",
+      thumb: ""
+    },
+    {
+      category: "CLIENT 6",
+      title: "",
       url: "",
       thumb: ""
     },
@@ -509,29 +509,32 @@ const CONFIG = {
     <p style="color:var(--soft);font-size:14px;margin-top:-32px;margin-bottom:40px;" class="fade-in">
       Vertel ons over je project. Wij reageren binnen 24 uur.
     </p>
+    <div data-fs-success style="display:none;color:var(--accent);font-size:15px;margin-bottom:16px;">Bericht verzonden. We nemen binnen 24 uur contact op.</div>
+    <div data-fs-error style="display:none;color:#e57373;font-size:14px;margin-bottom:16px;">Er ging iets mis. Probeer het opnieuw of mail ons direct.</div>
     <form class="contact-form fade-in" id="contactForm">
       <div class="form-row">
         <div class="form-field">
           <label class="form-label">Naam *</label>
-          <input class="form-input" type="text" placeholder="Je naam" required />
+          <input class="form-input" type="text" name="naam" placeholder="Je naam" data-fs-field required />
         </div>
         <div class="form-field">
           <label class="form-label">E-mail *</label>
-          <input class="form-input" type="email" placeholder="je@email.nl" required />
+          <input class="form-input" type="email" name="email" placeholder="je@email.nl" data-fs-field required />
         </div>
       </div>
       <div class="form-row">
         <div class="form-field">
           <label class="form-label">Bedrijf</label>
-          <input class="form-input" type="text" placeholder="Bedrijfsnaam" />
+          <input class="form-input" type="text" name="bedrijf" placeholder="Bedrijfsnaam" />
         </div>
       </div>
       <div class="form-field">
         <label class="form-label">Bericht *</label>
-        <textarea class="form-textarea form-input" placeholder="Vertel ons over je project..." required></textarea>
+        <textarea class="form-textarea form-input" name="bericht" placeholder="Vertel ons over je project..." data-fs-field required></textarea>
       </div>
-      <button type="submit" class="btn-submit">Verstuur bericht</button>
+      <button type="submit" class="btn-submit" data-fs-submit-btn>Verstuur bericht</button>
     </form>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
   </div>
 </section>
 
@@ -638,19 +641,9 @@ window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
 });
 
-// ── Contact form (mailto fallback) ────────────────────────
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const fields = this.querySelectorAll('input,select,textarea');
-  const naam   = fields[0].value;
-  const email  = fields[1].value;
-  const bedrijf= fields[2].value;
-  const pakket = fields[3].value;
-  const bericht= fields[4].value;
-  const subject= encodeURIComponent(`Aanvraag InFrame — ${naam}`);
-  const body   = encodeURIComponent(`Naam: ${naam}\nE-mail: ${email}\nBedrijf: ${bedrijf}\nPakket: ${pakket}\n\n${bericht}`);
-  window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
-});
+// ── Contact form (Formspree) ──────────────────────────────
+window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+formspree('initForm', { formElement: '#contactForm', formId: 'xaqldgzw' });
 
 // ── Intersection fade ─────────────────────────────────────
 const observer = new IntersectionObserver(entries => {
