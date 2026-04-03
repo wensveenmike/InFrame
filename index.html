@@ -73,16 +73,17 @@
     }
     .nav-links a:hover { color: var(--white); }
     .btn-primary {
+      display: inline-block;
       font-size: 11px;
       font-weight: 500;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--bg);
-      background: var(--white);
+      color: #000000 !important;
+      background: #ffffff !important;
       padding: 10px 20px;
       transition: background .2s, color .2s;
     }
-    .btn-primary:hover { background: var(--accent); }
+    .btn-primary:hover { background: var(--accent) !important; color: #000000 !important; }
 
     /* ─── HERO ───────────────────────────────────────────── */
     #hero {
@@ -138,13 +139,15 @@
     .btn-outline:hover { border-color: var(--white); }
     .scroll-hint {
       position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      color: var(--muted); font-size: 11px; letter-spacing: .1em;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity .2s;
     }
+    .scroll-hint:hover { opacity: 1; }
     .scroll-arrow {
-      width: 1px; height: 40px;
-      background: linear-gradient(to bottom, transparent, var(--muted));
+      display: block;
       animation: scrollPulse 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
     }
     @keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
 
@@ -477,14 +480,16 @@ const CONFIG = {
     <a href="#portfolio" class="btn-primary">Bekijk ons werk</a>
     <a href="#contact" class="btn-outline">Neem contact op</a>
   </div>
-  <div class="scroll-hint">
-    <div class="scroll-arrow"></div>
+  <div class="scroll-hint" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="scroll-arrow">
+      <path d="M12 5v14M5 13l7 7 7-7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </div>
 </section>
 
 <!-- ─── CLIENTS ───────────────────────────────────────────── -->
 <div id="clients">
-  <p class="carousel-label">Vertrouwd door toonaangevende merken</p>
+  <p class="carousel-label">Vertrouwd door</p>
   <div class="carousel-track-wrap">
     <div class="carousel-track" id="carouselTrack"></div>
   </div>
@@ -507,7 +512,7 @@ const CONFIG = {
     <p class="section-label fade-in">Contact</p>
     <h2 class="section-title fade-in">Laten we <em>praten.</em></h2>
     <p style="color:var(--soft);font-size:14px;margin-top:-32px;margin-bottom:40px;" class="fade-in">
-      Vertel ons over je project. Wij reageren binnen 24 uur.
+      Vertel ons je ideeën. Wij reageren binnen 24 uur.
     </p>
     <div data-fs-success style="display:none;color:var(--accent);font-size:15px;margin-bottom:16px;">Bericht verzonden. We nemen binnen 24 uur contact op.</div>
     <div data-fs-error style="display:none;color:#e57373;font-size:14px;margin-bottom:16px;">Er ging iets mis. Probeer het opnieuw of mail ons direct.</div>
